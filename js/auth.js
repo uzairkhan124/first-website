@@ -1,16 +1,4 @@
-/*const auth_user = [
-    {
-    u_name : "uzair@gmail.com",
-    pw : "uzairkhan"
-    }
-    ,{
-        u_name : "iftikhar@gmail.com",
-        pw : "iftikhar"
-    }
-]
-*/
-
-
+/*
 let auth =
    [
     {
@@ -25,10 +13,7 @@ let auth =
     }
 ];
 
-/*let auth = {
-     ["uzair@gmail.com","uzairkhan"],
-     ["iftikhar@gmail.com", "iftikhar"] 
-}*/
+
 function checkAuth(){
     let user = document.getElementById("inputEmail");
     let password = document.getElementById("inputPassword");
@@ -37,9 +22,7 @@ function checkAuth(){
         
         if(auth[i].u_name === user.value && auth[i].pw === password.value){
             alert("this is working");
-            //document.getElementsByClassName("userName").innerHTML = auth[i].fullName ;
-            let testing = document.getElementById("userName");
-            console.log(testing);
+            localStorage.setItem("userName",auth[i].fullName);
             return true ;
         }
         else {
@@ -49,15 +32,42 @@ function checkAuth(){
     }
 
     return false ;
-    /*let i= 0
-    for( i in auth_user){
-        if (user.value == auth_user[i][u_name]){
-            console.log("this is perfect");
-            alert("hello");
-        }
-        else{
-            alert("not working")
-        }
-    }*/
-}
+    
+}*/
 
+
+const checkAuth= async() => {
+
+    let user = document.getElementById("inputEmail");
+    let password = document.getElementById("inputPassword");
+
+    let myBody = {
+        username: user,
+        password: password
+    }
+
+    /*fetch("https://dev.muawin.com:9000/swagger-ui.html#/web-client-rest-contoller/LoginWithUsernameUsingPOST", {
+        method: "POST",
+        body: formBody,
+        header : {
+            "Content-Type" : "application/json"
+        }
+    })
+    .then(function(response) {
+            return response.text()
+    })
+    .then(function(text) {
+            alert(text);
+            console.log(text)
+    })*/
+
+    const response = await fetch('https://dev.muawin.com:9000/swagger-ui.html#/web-client-rest-contoller/LoginWithUsernameUsingPOST', {
+        method: 'POST',
+        body: myBody,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+    });
+    const myJson = await response.json();
+    console.log(myJson);
+}
