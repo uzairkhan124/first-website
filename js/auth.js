@@ -63,22 +63,22 @@ let checkAuth = () => {
             console.log("valid");
             const asyncLocalStorage = {
                 setItem: async function (key, value) {
-                    
+
                     return localStorage.setItem(key, value);
                 }
             };
             asyncLocalStorage.setItem("userName", result.displayName)
+            let test = document.getElementById("formData");
+            test.onsubmit = true ;
         } else {
-            const preventDflt = document.getElementById("stopIt");
-            preventDflt.addEventListener('click', function (e) {
-                e.preventDefault();
-            })
             console.log("invalid");
-            
+            let test = document.getElementById("formData");
+            test.onsubmit = false ;
+
         }
     }).catch(err => {
         console.log(" error ")
     })
-    
+
     console.log("eof")
 }
