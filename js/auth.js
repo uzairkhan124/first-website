@@ -36,38 +36,49 @@ function checkAuth(){
 }*/
 
 
-const checkAuth= async() => {
+let checkAuth = () => {
+
 
     let user = document.getElementById("inputEmail");
     let password = document.getElementById("inputPassword");
 
     let myBody = {
-        username: user,
-        password: password
+        username: user.value,
+        password: password.value
     }
 
-    /*fetch("https://dev.muawin.com:9000/swagger-ui.html#/web-client-rest-contoller/LoginWithUsernameUsingPOST", {
-        method: "POST",
-        body: formBody,
-        header : {
-            "Content-Type" : "application/json"
-        }
-    })
-    .then(function(response) {
-            return response.text()
-    })
-    .then(function(text) {
-            alert(text);
-            console.log(text)
-    })*/
 
-    const response = await fetch('https://dev.muawin.com:9000/swagger-ui.html#/web-client-rest-contoller/LoginWithUsernameUsingPOST', {
+    fetch(`https://dev.muawin.com:9000/LoginWithUsername?username=${encodeURIComponent(myBody.username)}&password=${encodeURIComponent(myBody.password)}`, {
         method: 'POST',
-        body: myBody,
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         }
-    });
-    const myJson = await response.json();
-    console.log(myJson);
+    }).then(response => {
+        console.log(response);
+        let myJson = response.json();
+        console.log(myJson);
+        return myJson;
+    }).then(result => {
+        if (result.Requested_Action == true) {
+            console.log("valid");
+            const asyncLocalStorage = {
+                setItem: async function (key, value) {
+                    
+                    return localStorage.setItem(key, value);
+                }
+            };
+            asyncLocalStorage.setItem("userName", result.displayName)
+        } else {
+            const preventDflt = document.getElementById("stopIt");
+            preventDflt.addEventListener('click', function (e) {
+                e.preventDefault();
+            })
+            console.log("invalid");
+            
+        }
+    }).catch(err => {
+        console.log(" error ")
+    })
+    
+    console.log("eof")
 }
